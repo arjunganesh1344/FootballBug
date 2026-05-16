@@ -4,6 +4,14 @@
 @layer base {
   body {
     background-color: #0a0a0a;
+    /* subtle yard-line stripe pattern */
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 79px,
+      rgba(255, 255, 255, 0.025) 79px,
+      rgba(255, 255, 255, 0.025) 80px
+    );
     color: #e5e5e5;
   }
 }
