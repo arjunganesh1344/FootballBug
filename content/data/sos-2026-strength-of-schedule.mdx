@@ -1,0 +1,91 @@
+---
+title: "2026 NFL Offensive and Defensive Strength of Schedules"
+date: "2026-05-17"
+description: "Using opponent-adjusted data from 2025 plays, we determine which offenses and defenses drew the best schedule."
+tags: ["schedule release", "EPA", "schedule", "2026"]
+---
+
+In honor of the 2026 NFL schedule release (aka the Chargers' super bowl) let's do a quick breakdown on which offenses and which defenses have it best this coming season.
+
+## Strength of Schedule (S.O.S.)
+
+Typically, alongside an NFL schedule release comes an onslaught of analysis on which teams have it easy and which teams don't (Chargers weeks 3-10 is looking pretty miserable). However, a lot of these SOS calculations are done by taking the cumulative winning percentage of all 17 opponents a team is scheduled to play.
+
+It makes sense, good teams win and bad teams lose. But wins are noisy; they are incredibly susceptible to 4th quarter variance, injury luck, and schedule cascades. A team with ten wins might have been a seven-win team against a different draw.
+
+That's why we'll be using every analyst's favorite metric, EPA, to cut through the noise. This will help us determine what happens on every single play, normalized for down, distance, and field position, regardless of what the scoreboard says. I grabbed 48,771 plays from last year (weeks 1-22) to score every offense and defense by their opponent-adjusted EPA/play to determine how much of a threat they'll be in 2026.
+
+## Offensive and Defensive SOS
+
+Using the nflfastR dataset, we computed each team's average EPA per play split into two halves:
+
+- **Raw offensive EPA/play**
+- **Raw defensive EPA/play**
+
+Something to note, defensive EPA is measured from the offense's perspective, so a really strong defense will have a negative raw_def_epa relative to the mean, while an efficient offense will have a positive raw_off_epa relative to the mean. At some point we'll be negating defensive EPA for the sake of visualization, but we'll get to that. We have a couple more steps to formulate our new strength of schedule.
+
+From the same play-by-play data, we then paired every unique offense with the defense that they shared the field. This gives us all the defenses that each offense played and all the offenses that each defense played. Say that 5 times fast.
+
+So why did we do this? The issue with what we have so far is that this raw EPA/play is inflated or deflated by opponent quality. For example, a team that faced weak defenses all year will look like a better offense than they really are. We can correct for this (a little bit) with a one-level opponent adjustment. We don't have to iterate till convergence for our simple use case, we're not trying to invent a metric here.
+
+Here's the formula below:
+
+```
+adj_off_epa = raw_off_epa - (avg_opp_def_epa - league_avg_def_epa)
+adj_def_epa = raw_def_epa - (avg_opp_off_epa - league_avg_off_epa)
+```
+
+Now that we have opponent-adjusted EPA for each team, we can construct our 2026 SOS scores using the 2026 schedule releases. For each team, we joined their 17 opponents against the 2025 adjusted EPA values computed above.
+
+- **`off_sos`** = average `adj_def_epa` of all 2026 opponents
+- **`def_sos`** = average `adj_off_epa` of all 2026 opponents
+
+Nice. Now let's come up with super creative names so that they're easier to understand.
+
+**2026 Opponent DEF Score** — how good are the defenses your offense will face in 2026? A positive score means your opponents' defenses suppressed more EPA than league average. Higher is a tougher draw for your offense.
+
+**2026 Opponent OFF Score** — how good are the offenses your defense will face in 2026? A positive score means your opponents' offenses generated more EPA than league average. Higher is a tougher draw for your defense.
+
+Both scores are centered at zero (league average). A gap of 0.028, which is the distance between the hardest and median Opponent DEF scores, translates to roughly 1.7 expected points per game over a full slate of 60 offensive plays. Over 17 games, that's around 29 EPA, representing a real and compounding edge.
+
+## Opponent DEF Score: How Tough Are the Defenses You'll Face?
+
+![2026 NFL Opponent DEF Score Rankings](/images/sos-2026/off-sos-2026.png)
+
+**The Panthers' offense has it rough.** Their Opponent DEF Score of +0.028 is the highest by a comfortable margin — they'll face the toughest collective slate of defenses in 2026. There's reason to be optimistic about year 4 Bryce (who has playoff experience now) with McMillan, Coker, and Brazzell, but they'll have to face an onslaught of difficult matchups including the Browns, Texans, Eagles, Broncos, Vikings, Steelers, Seahawks, and the rising Falcons defense twice a year.
+
+At the other end: **Philadelphia (−0.043)** has the most favorable draw by a wide margin. Their opponents' defenses were, on average, 0.043 EPA/play worse than league average in 2025. This is a little surprising, cuz taking a quick glance at their schedule I see Houston and Seattle in December, but I guess playing the Giants, the Cowboys, and the Commanders each twice a year does quite a blow to the numbers.
+
+## Opponent OFF Score: How Tough Are the Offenses You'll Face?
+
+![2026 NFL Opponent OFF Score Rankings](/images/sos-2026/def-sos-2026.png)
+
+**Seattle (+0.037)** sits at the top of the Opponent OFF Score chart. Their defense faces the most dangerous collective slate of offenses in 2026, including the Rams twice, the 49ers twice, the Patriots, and the quickly improving Bears (the Ben Johnson effect is real)
+
+On the easier end, **Cincinnati (−0.024)** draws a very chill defensive schedule. Playing the Browns twice never hurts, but even beyond that they face a series of the Titans, Falcons, and Dolphins. This massive break, combined with some serious additions to their defense, might end up making them seem like they took a bigger jump than they actually did.
+
+## The Full Picture: Schedule Quadrants
+
+When you plot both scores together, both axes go higher = harder — so **easy/easy lands in the bottom-left** and hard/hard in the top-right. The medians split the field into four clusters.
+
+![2026 NFL Schedule Difficulty: Opponent DEF vs. Opponent OFF](/images/sos-2026/sos-quadrant-2026.png)
+
+**Bottom-left — easy both ways (NO, CLE, DET, NE, NYJ, KC):** New Orleans and Cleveland catch breaks on both sides, which will help them solidify their "pointing upwards" case. This could also bode well for a bounce-back year for Detroit, which might be needed seeing how good the other NFC North teams are.
+
+**Top-right — hard both ways (CHI, SF, GB, LAC, ARI, BUF):** The most thankless draws. These teams face above-average defenses on offense *and* above-average offenses on defense, which might explain why the sportsbooks have the Cardinals as the underdog in 17 out of 17 of their games this season.
+
+## Full Data
+
+<SosTable2026 />
+
+## Caveats
+
+A few things to keep in mind before treating these as fate:
+
+**One year of data.** The entire model runs on 2025 EPA. Teams that underwent major offseason changes — new quarterback, new coordinator, significant roster turnover — may be poor proxies for what their units will look like in 2026. A metric built on 2025 Bengals offense is not a metric built on 2026 Bengals offense.
+
+**One-level adjustment.** We correct for opponent quality once but don't iterate to convergence the way DVOA does. This captures the bulk of the schedule-quality signal but not all of it.
+
+**Regular season only.** The 2026 SOS is based on 17-game slates only. Playoff matchups are unknown and excluded.
+
+The full methodology and notebook are in the repo under `data-analysis/sos-2026/`.

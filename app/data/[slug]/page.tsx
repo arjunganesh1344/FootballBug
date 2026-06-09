@@ -1,6 +1,9 @@
 import { getArticleBySlug, getArticleSlugs, formatDate } from '@/lib/articles'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { notFound } from 'next/navigation'
+import SosTable2026 from '@/components/SosTable2026'
+
+const mdxComponents = { SosTable2026 }
 
 export async function generateStaticParams() {
   return getArticleSlugs('data').map((slug) => ({ slug }))
@@ -40,7 +43,7 @@ export default async function DataArticlePage({
         </div>
       </div>
       <div className="prose prose-invert prose-neutral max-w-none prose-headings:text-white prose-a:text-cyan-400 prose-strong:text-white prose-code:text-cyan-300">
-        <MDXRemote source={content} />
+        <MDXRemote source={content} components={mdxComponents} />
       </div>
     </article>
   )

@@ -1,11 +1,13 @@
-# Methodology: 2026 Offensive & Defensive SOS via Opponent-Adjusted EPA
+# Methodology: 2026 Opponent DEF Score & Opponent OFF Score via Opponent-Adjusted EPA
 
 ## Goal
 
 For every NFL team, produce two strength of schedule scores based on their 2026 opponents' 2025 performance:
 
-- **Offensive SOS** — how tough are the defenses your offense will face?
-- **Defensive SOS** — how tough are the offenses your defense will face?
+- **Opponent DEF Score** — how tough are the defenses your offense will face? Higher = harder.
+- **Opponent OFF Score** — how tough are the offenses your defense will face? Higher = harder.
+
+Both scores use the same direction: **higher = harder**. See the note in Step 5 on how `off_sos` from the CSV is transformed before publishing.
 
 ---
 
@@ -84,10 +86,19 @@ From the 2026 schedule (`import_schedules([2026])`), we used:
 
 For each team, we joined their 17 opponents against the 2025 adjusted EPA values computed above:
 
-- **Offensive SOS** = average `adj_def_epa` of all 2026 opponents
+- **`off_sos`** (CSV column) = average `adj_def_epa` of all 2026 opponents
   - Lower = harder (you face better defenses)
-- **Defensive SOS** = average `adj_off_epa` of all 2026 opponents
+- **`def_sos`** (CSV column) = average `adj_off_epa` of all 2026 opponents
   - Higher = harder (you face better offenses)
+
+### Published score names and direction
+
+The raw `off_sos` column has an inverted sign relative to `def_sos`, which is confusing. For publication and visualizations, both are transformed to a unified scale where **higher = harder**:
+
+- **Opponent DEF Score** = `-off_sos` — higher means tougher defenses for your offense
+- **Opponent OFF Score** = `def_sos` — no change; higher already means tougher offenses for your defense
+
+This transformation is applied in `visualizations.py` and reflected in the article. The `sos_2026.csv` file retains the raw `off_sos` / `def_sos` column names for traceability back to the notebook.
 
 ---
 

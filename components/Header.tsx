@@ -6,7 +6,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="font-bold text-lg tracking-tight text-white flex items-center gap-2">
           <span>🏈</span>
-          FootballBug
+          Tempo
         </Link>
         <nav className="flex gap-6 text-sm font-medium">
           <Link

@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <div className="space-y-16">
       <section className="pt-8">
-        <h1 className="text-5xl font-bold tracking-tight text-white mb-3">FootballBug</h1>
+        <h1 className="text-5xl font-bold tracking-tight text-white mb-3">Tempo</h1>
         <p className="text-neutral-400 text-lg">NFL film breakdown and data analytics.</p>
       </section>
 

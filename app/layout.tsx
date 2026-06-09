@@ -7,7 +7,7 @@ import FieldBackground from '@/components/FieldBackground'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FootballBug',
+  title: 'Tempo',
   description: 'NFL film analysis and data analytics.',
 }
 
