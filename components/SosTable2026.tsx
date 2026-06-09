@@ -1,4 +1,8 @@
-// Sorted by Opponent DEF Score descending (hardest first). Higher = harder for both columns.
+'use client'
+import { useState } from 'react'
+
+type SortCol = 'oppDef' | 'oppOff'
+
 const DATA = [
   { team: 'CAR', oppDef:  0.0283, oppOff: -0.0140 },
   { team: 'CHI', oppDef:  0.0201, oppOff:  0.0049 },
@@ -50,6 +54,24 @@ function Cell({ value }: { value: number }) {
 }
 
 export default function SosTable2026() {
+  const [sortCol, setSortCol] = useState<SortCol>('oppDef')
+
+  const sorted = [...DATA].sort((a, b) => b[sortCol] - a[sortCol])
+
+  function ColHeader({ col, label }: { col: SortCol; label: string }) {
+    const active = sortCol === col
+    return (
+      <th
+        className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider cursor-pointer select-none"
+        onClick={() => setSortCol(col)}
+      >
+        <span className={active ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}>
+          {label}{active ? ' ↓' : ''}
+        </span>
+      </th>
+    )
+  }
+
   return (
     <div className="not-prose my-8">
       <div className="overflow-hidden rounded-lg border border-neutral-800">
@@ -62,16 +84,12 @@ export default function SosTable2026() {
               <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-neutral-300">
                 Team
               </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-neutral-300">
-                Opp DEF
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-neutral-300">
-                Opp OFF
-              </th>
+              <ColHeader col="oppDef" label="Opp DEF" />
+              <ColHeader col="oppOff" label="Opp OFF" />
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-800/60">
-            {DATA.map(({ team, oppDef, oppOff }, i) => (
+            {sorted.map(({ team, oppDef, oppOff }, i) => (
               <tr key={team} className="bg-neutral-950 transition-colors hover:bg-neutral-900">
                 <td className="px-4 py-2.5 text-xs text-neutral-600">{i + 1}</td>
                 <td className="px-4 py-2.5 font-semibold text-white">{team}</td>
@@ -83,7 +101,7 @@ export default function SosTable2026() {
         </table>
       </div>
       <p className="mt-2 text-right text-xs text-neutral-600">
-        Higher = harder. Sorted by Opp DEF.
+        Higher = harder. Click a column to sort.
       </p>
     </div>
   )
