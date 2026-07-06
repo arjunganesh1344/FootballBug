@@ -1,0 +1,85 @@
+---
+title: "Are the Steelers Really Clutch, or Just Making Games Closer Than They Should Be?"
+date: "2026-07-04"
+description: "Pittsburgh leads the NFL in one-score wins since 2020 — but they're also near the top in converting comfortable leads into heart attacks."
+tags: ["steelers", "one-score games", "clutch", "win probability", "2020-2025"]
+---
+
+Every Steelers fan has a story. A two-possession lead dissolved in the fourth quarter, a late drive by the other team, a field goal or touchdown that makes the final score look way more respectable than it should. Then somehow Pittsburgh wins. Their quarterback scrambles, or T.J. Watt forces a fumble, or something just *happens*.
+
+The narrative is that the Steelers are gritty, battle-tested, clutch. And the record backs it up — kind of. But spend some time in the play-by-play data from 2020 through 2025 and a more complicated picture emerges.
+
+Pittsburgh isn't just winning close games. They're *manufacturing* them.
+
+## Part 1: The Record is Real
+
+Let's establish the baseline. Since 2020, across the regular season, Pittsburgh has been the best team in football in games decided by one score (8 points or fewer).
+
+![One-Score Game Win % (2020–2025 Regular Season)](/images/steelers-clutch/one-score-record.png)
+
+**44 wins and 19 losses** in one-score games. A 69.8% win rate. No other team in the league is close — Kansas City is second at 64.4% and Philadelphia is third at 64.3%. Arizona sits at the bottom at 32.7%, meaning the Steelers are more than twice as likely to win a tight game as the Cardinals.
+
+This is over 63 one-score games across six seasons. That's a large enough sample that you can't wave it away as noise. Pittsburgh has genuinely been elite at finding ways to win games that came down to the wire.
+
+So the clutch narrative has legs. The Steelers show up when it matters.
+
+The question is *why* it keeps mattering in the first place.
+
+## Part 2: The Heart Attack Factory
+
+Here's where the story gets more complicated.
+
+For each game, we used play-by-play data to track the maximum lead any team held during the second half. A **heart attack win** is defined as: the team won, held a 14+ point lead at some point in the second half, and the final margin was 8 points or fewer.
+
+In other words — you were up two scores comfortably, and somehow it ended as a nail-biter.
+
+![Heart Attack Wins by Team (2020–2025 Regular Season)](/images/steelers-clutch/heart-attack-wins.png)
+
+Pittsburgh has **11 heart attack wins** since 2020, tied for second-most in the NFL. Only Philadelphia has more (12, across a much larger win total). That number alone is eyebrow-raising, but the more damning figure is the rate.
+
+The Steelers had 24 games in this span where they held a 14+ point lead in the second half. Eleven of those 24 ended as one-score wins. That's a **45.8% heart attack rate** — tied for the highest in the NFL.
+
+Read that again: nearly half the time Pittsburgh had a comfortable two-score cushion in the second half, they let the game get tight. For comparison:
+
+- **Kansas City** had 35 big-lead games in this span. Only 6 turned into heart attacks — a 17.1% rate.
+- **Baltimore** had 44 big-lead games (most in the league). Only 8 became heart attacks — an 18.2% rate.
+- **San Francisco** had 45 big-lead games. Eight heart attacks — 17.8%.
+
+Those are teams that know how to step on a throat. Pittsburgh is the team stomping on the gas, then somehow ending up in a footrace.
+
+Some specific Pittsburgh games from this stretch that should give Steelers fans flashbacks:
+
+- **2020 Week 7 at Tennessee**: Led by 20 in the second half. Won 27-24.
+- **2021 Week 9 vs. Chicago**: Led by 14. Won 29-27 — a two-point game.
+- **2024 Week 13 at Cincinnati**: Led by 17. Won 44-38 in a shootout.
+- **2025 Week 4 vs. Minnesota**: Led by 18. Won 24-21.
+
+These are not flukes. They are a pattern.
+
+## Clutch or Chaotic?
+
+The most honest way to frame this is on a scatter plot. One axis is one-score win percentage (how good are you in close games); the other is what share of your total wins were heart attack games (how often do you create those close games unnecessarily).
+
+![Clutch or Chaotic? One-Score Win% vs Heart Attack Rate](/images/steelers-clutch/clutch-vs-chaotic.png)
+
+Pittsburgh lives firmly in the top-right quadrant: **Clutch and Chaotic**. They win tight games at the highest rate in the league, and they manufacture a disproportionate share of those tight games themselves.
+
+Kansas City, for context, is in the top-left quadrant: high one-score win percentage and a *low* heart attack rate. They win close games, but they also protect leads cleanly. That's the difference between a team that's truly clutch and a team that's clutch out of necessity.
+
+The Steelers, to their credit, keep pulling it off. The T.J. Watt strip-sack comes at the right moment. The defense tightens when it needs to. Something works. But the thing is — that something shouldn't need to work if the offense hadn't spent the fourth quarter turning a two-touchdown cushion into a one-possession game.
+
+## The Bottom Line
+
+Since 2020:
+
+- Pittsburgh is **#1 in the NFL** in one-score win percentage at 69.8% (44-19).
+- They are **#2 in the NFL** in raw heart attack wins (11).
+- Nearly **half** of the games where they held a 14+ point second-half lead ended as a one-score game — the highest rate in football.
+
+The Steelers are genuinely good at winning close games. They are also, with remarkable consistency, the reason those games are close to begin with. Whether that is a testament to their clutch gene or a warning about their inability to close out opponents cleanly probably depends on how you feel about Pittsburgh.
+
+But the data is pretty clear: they aren't just finding clutch moments. They're creating the need for them.
+
+## Methodology
+
+Data sourced from `nfl_data_py`, covering 2020–2025 NFL regular seasons (1,615 games). One-score games defined as final margin ≤ 8 points. Heart attack wins require: (1) team won, (2) team held a 14+ point lead at any point in the second half (quarters 3–4) based on score differential from play-by-play, and (3) final margin ≤ 8 points. Overtime games are included — a team can hold a big lead in regulation and still lose in OT, but those would not count as a heart attack win under this definition. The 2025 season includes regular season weeks 1–18.
